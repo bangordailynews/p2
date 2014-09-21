@@ -1,6 +1,10 @@
 <?php
+  error_reporting(E_ALL);
+  ini_set('display_errors', 1);
 
-    
+  $password = "Your Password will appear here :-)"; // initiate password variable
+
+  
 ?>
 
 <!DOCTYPE html>
@@ -10,6 +14,12 @@
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>xkcd password</title>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- Include JQuery -->
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -50,12 +60,12 @@
     </div>
 
     <div class="container">
-      <form role="form">
-        <h2 class="text-center" id="password">Your Password will appear here :-)</h2>
+      <form role="form" method="GET">
+        <h2 class="text-center" id="password"><?php echo $password ?></h2>
 
         <div class="form-group col-lg-6">
           <label for="wordCount">How many words do you want to use:</label>
-          <select class="form-control" id="wordCount">
+          <select class="form-control" id="wordCount" name="wordCount">
             <option value="3">3 words</option>
             <option value="4">4 words</option>
             <option value="5">5 words</option>
@@ -63,37 +73,66 @@
         </div>
 
         <div class="form-group col-lg-6">
-          <label for="MaxLength">Maximum Length of Password:</label>
-          <input type="text" class="form-control" id="MaxLength" value="Example: 8, 12, or 20"></input>
+          <label for="maxLength">Maximum Length of Password:</label>
+          <input type="text" class="form-control" id="maxLength" name="maxLength" placeholder="Example: 12, 16 or 20"></input>
         </div>
 
         <div class="checkbox col-lg-12">
           <label class="col-lg-2">
-            <input type="checkbox">Include Digits</input>
+            <input type="checkbox" id="includeDigit" name="includeDigit">Include Digits</input>
           </label>
           <label class="col-lg-2">
-            <input type="checkbox">Capitalize 1st Letters</input>
+            <input type="checkbox" id="capitalization" name="capitalization">Capitalize 1st Letters</input>
           </label>
           <label class="col-lg-2">
-            <input type="checkbox">All Upper Case</input>
+            <input type="checkbox" id="upperCase" name="upperCase">All Upper Case</input>
           </label>
           <label class="col-lg-2">
-            <input type="checkbox">All Lower Case</input>
+            <input type="checkbox" id="lowerCase" name="lowerCase">All Lower Case</input>
           </label>
           <label class="col-lg-4">
-            <input type="checkbox">Include Symbols (&#36;&#45;&#64;&#95;&#38;)</input>
+            <input type="checkbox" id="includeSymbol" name="includeSymbol">Include Symbols (&#36;&#45;&#64;&#95;&#38;)</input>
           </label>
         </div>
 
         <div class="form-group">
-          <button type="submit" class="btn btn-primary col-lg-4 col-lg-offset-4">Submit</button>
+          <button type="submit" class="btn btn-primary col-lg-4 col-lg-offset-4" id="submitBtn">Submit</button>
         </div>
       </form>
     </div> 
+    <script type="text/JavaScript">
+      $("#submitBtn").click(function(){
+        var proceed = true;
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+        if($("#maxLength").val() !== "" && isNaN($("#maxLength").val())) { //if user did not input a number in the Max number of password field
+          proceed = false; // do not proceed
+          $("#maxLength").css('border-color', 'red'); // change border color to red
+          $("#maxLength").val("Please enter a number.");
+        }
+
+        console.log(proceed);
+        if(proceed){
+          $("#maxLength").css('border-color', 'green'); // reset the border color
+
+          get_data = {
+            'wordCount'       : $('select[name="wordCount"]').val(),
+            'maxLength'       : $('input[name="maxLength"]').val(),
+            'includeDigit'    : $('input[name="includeDigit"]').prop('checked'),
+            'capitalization'  : $('input[name="capitalization"]').prop('checked'),
+            'upperCase'       : $('input[name="upperCase"]').prop('checked'),
+            'lowerCase'       : $('input[name="lowerCase"]').prop('checked'),
+            'includeSymbol'   : $('input[name="includeSymbol"]').prop('checked')
+          };
+
+          $.get('php/passwordGenerator.php', get_data, function(response){
+            output = response.text;
+          }, 'json');
+
+          console.log(get_data);
+        }
+        return false;
+      })
+    </script>
+    
 </body>
 </html>
