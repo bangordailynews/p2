@@ -1,10 +1,6 @@
 <?php
   error_reporting(E_ALL);
   ini_set('display_errors', 1);
-
-  $password = "Your Password will appear here :-)"; // initiate password variable
-
-  
 ?>
 
 <!DOCTYPE html>
@@ -61,14 +57,14 @@
 
     <div class="container">
       <form role="form" method="GET">
-        <h2 class="text-center" id="password"><?php echo $password ?></h2>
+        <h2 class="text-center" id="password">Your Password will appear here :-)</h2>
 
         <div class="form-group col-lg-6">
           <label for="wordCount">How many words do you want to use:</label>
           <select class="form-control" id="wordCount" name="wordCount">
-            <option value="3">3 words</option>
             <option value="4">4 words</option>
             <option value="5">5 words</option>
+            <option value="6">6 words</option>
           </select>          
         </div>
 
@@ -79,7 +75,7 @@
 
         <div class="checkbox col-lg-12">
           <label class="col-lg-2">
-            <input type="checkbox" id="includeDigit" name="includeDigit">Include Digits</input>
+            <input type="checkbox" id="includeDigit" name="includeDigit">Include Digits (0-9)</input>
           </label>
           <label class="col-lg-2">
             <input type="checkbox" id="capitalization" name="capitalization">Capitalize 1st Letters</input>
@@ -101,6 +97,21 @@
       </form>
     </div> 
     <script type="text/JavaScript">
+      $("#upperCase").click(function(){
+        $('#lowerCase').attr('checked', false);
+        $('#capitalization').attr('checked', false);
+      })
+
+      $("#lowerCase").click(function(){
+        $('#upperCase').attr('checked', false);
+        $('#capitalization').attr('checked', false);
+      })
+
+      $("#capitalization").click(function(){
+        $('#upperCase').attr('checked', false);
+        $('#lowerCase').attr('checked', false);
+      })
+
       $("#submitBtn").click(function(){
         var proceed = true;
 
@@ -110,7 +121,6 @@
           $("#maxLength").val("Please enter a number.");
         }
 
-        console.log(proceed);
         if(proceed){
           $("#maxLength").css('border-color', 'green'); // reset the border color
 
@@ -124,11 +134,20 @@
             'includeSymbol'   : $('input[name="includeSymbol"]').prop('checked')
           };
 
-          $.get('php/passwordGenerator.php', get_data, function(response){
-            output = response.text;
-          }, 'json');
 
-          console.log(get_data);
+          $.get("php/passwordGenerator.php", get_data).done(function(response){
+            console.log("entering .get function!");
+            console.log(response);
+            var obj = jQuery.parseJSON(response);
+
+            if(obj.type == 'error'){
+              $("#password").css('color', 'red');
+            } else {
+              $("#password").css('color', '#5cb85c');
+            }
+
+            $("#password").text(obj.text);
+          }, 'json');
         }
         return false;
       })
