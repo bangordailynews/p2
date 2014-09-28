@@ -19,38 +19,38 @@
 		$content[$i-1] = file_get_contents("http://esl.about.com/library/vocabulary/bl1000_list".$i.".htm");
 		}
 
+		if($includeDigit){ // if include digits (front or behind), 2 char should be taken out from the maxLength
+			$maxLength -= 2;			
+		}
+
 		for($i = 1; $i <= $wordCount; $i++){
 			$loop = false; // default loop to false to run only once
-			$loopCount = 0;
 
 			if($maxLength > 0){ // if maxLength is more than 0
-				
-				if($includeDigit){ // if include digits (front or behind), 2 char should be taken out from the maxLength
-					$maxLength -= 2;
-				}
 
 				$maxWordLength = floor($maxLength / $wordCount); // calculate maxWordLength
+				
+				if($maxWordLength < 3){ // if the max word length for xkcd apassword is less than 3 letters, quit
+					$temp_output = "Your choice of total words and max length are unreasonable... "."Your words can only be ".$maxWordLength." characters long. Please change the maximum word length to more than ".($maxLength+2).".";
+					die(json_encode(array('type' => 'error', 'text' => $temp_output)));
+				} else {
 
-				do{ // do this at least once.
-					preg_match_all('/mp3">(.*?)<\/a>/s', $content[rand(0, 3)], $matches);
+					do{ // do this at least once.
+						preg_match_all('/mp3">(.*?)<\/a>/s', $content[rand(0, 3)], $matches);
 
-					$choice = $matches[1][rand(1, 249)]." ";
+						$choice = $matches[1][rand(1, 249)]." ";
 
-					if(strlen($choice) <= $maxWordLength){ // if the chosen word's length is less than the max allowed
-						$temp_output .= $choice; // save the choice
-						$loop = false; // and exit the do-while loop
-					} else {
-						$loop = true; // otherwise, keep looping for the qualified word
-					}
+						if(strlen($choice) <= $maxWordLength){ // if the chosen word's length is less than the max allowed
+							$temp_output .= $choice; // save the choice
+							$loop = false; // and exit the do-while loop
+						} else {
+							$loop = true; // otherwise, keep looping for the qualified word
+						}
 
-					$loopCount++;
-					if($loopCount > 99){ // if we are looking for the chosen word for more than 5 loops
-						$loop = false;
-						$temp_output = "Your choice of total words and max length are unreasonable... Please change either the total number of words or maximum length of password.";
-						die(json_encode(array('type' => 'error', 'text' => $temp_output))); // tell the user they are not setting reasonable request.
-					}
+					} while($loop);
+				}
 
-				} while($loop);
+				
 
 			} else { // simply find the magic words :)
 				preg_match_all('/mp3">(.*?)<\/a>/s', $content[rand(0, 3)], $matches);
