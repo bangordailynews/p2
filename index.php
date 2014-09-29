@@ -120,15 +120,17 @@
         var proceed = true;
         console.log("maxLength.val() is "+$("#maxLength").val());
 
-        var decimal=  /^[-]?[0-9]*[.][0-9]*$/;
-        if(($("#maxLength").val() !== "" && isNaN($("#maxLength").val())) || ($("#maxLength").val() !== "" && 
-$("#maxLength").val().match(decimal))) { 
+        var decimal=  /^[0-9]*[.][0-9]*$/;
+        if($("#maxLength").val() !== ""){
+          if(isNaN($("#maxLength").val()) || $("#maxLength").val() <= 0 || $("#maxLength").val().match(decimal)) { 
         //if user did not input a number in the Max number of password field
         //that is if input field is not empty, the input is a positive integer
           proceed = false; // do not proceed
           $("#maxLength").css('border-color', 'red'); // change border color to red
           $("#maxLength").val("Please enter a natural number.");
+          }
         }
+        
 
         if(proceed){
           $("#maxLength").css('border-color', 'green'); // reset the border color
