@@ -31,7 +31,7 @@
 				$maxWordLength = floor($maxLength / $wordCount); // calculate maxWordLength
 				
 				if($maxWordLength < 3){ // if the max word length for xkcd apassword is less than 3 letters, quit
-					$temp_output = "Your choice of total words and max length are unreasonable... "."Your words can only be ".$maxWordLength." characters long. Please change the maximum word length to more than ".($maxLength+2).".";
+					$temp_output = "Your choice of total words and max length are unreasonable... "."Your words can only be ".$maxWordLength." characters long. Please change the maximum word length to more than your current input.";
 					die(json_encode(array('type' => 'error', 'text' => $temp_output)));
 				} else {
 

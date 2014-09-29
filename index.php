@@ -65,6 +65,10 @@
             <option value="4">4 words</option>
             <option value="5">5 words</option>
             <option value="6">6 words</option>
+            <option value="7">7 words</option>
+            <option value="8">8 words</option>
+            <option value="9">9 words</option>
+            <option value="10">10 words</option>
           </select>          
         </div>
 
@@ -114,11 +118,16 @@
 
       $("#submitBtn").click(function(){
         var proceed = true;
+        console.log("maxLength.val() is "+$("#maxLength").val());
 
-        if($("#maxLength").val() !== "" && isNaN($("#maxLength").val())) { //if user did not input a number in the Max number of password field
+        var decimal=  /^[-]?[0-9]*[.][0-9]*$/;
+        if(($("#maxLength").val() !== "" && isNaN($("#maxLength").val())) || ($("#maxLength").val() !== "" && 
+$("#maxLength").val().match(decimal))) { 
+        //if user did not input a number in the Max number of password field
+        //that is if input field is not empty, the input is a positive integer
           proceed = false; // do not proceed
           $("#maxLength").css('border-color', 'red'); // change border color to red
-          $("#maxLength").val("Please enter a number.");
+          $("#maxLength").val("Please enter a natural number.");
         }
 
         if(proceed){
