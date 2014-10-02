@@ -19,21 +19,7 @@
 
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <style type="text/css">
-      .checkbox, h2, button{
-        margin-bottom: 30px;
-      }
-      .other-color{
-        background-color: #865f86;
-      }
-      .navbar-inverse .navbar-brand{
-        color: #F6CEE3;
-      }
-      #password{
-        color: #5cb85c;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
 
 </head>
 
@@ -74,24 +60,24 @@
 
         <div class="form-group col-lg-6">
           <label for="maxLength">Maximum Length of Password:</label>
-          <input type="text" class="form-control" id="maxLength" name="maxLength" placeholder="Example: 12, 16 or 20"></input>
+          <input type="text" class="form-control" id="maxLength" name="maxLength" placeholder="Example: 12, 16 or 20">
         </div>
 
         <div class="checkbox col-lg-12">
           <label class="col-lg-2">
-            <input type="checkbox" id="includeDigit" name="includeDigit">Include Digits (0-9)</input>
+            <input type="checkbox" id="includeDigit" name="includeDigit">Include Digits (0-9)
           </label>
           <label class="col-lg-2">
-            <input type="checkbox" id="capitalization" name="capitalization">Capitalize 1st Letters</input>
+            <input type="checkbox" id="capitalization" name="capitalization">Capitalize 1st Letters
           </label>
           <label class="col-lg-2">
-            <input type="checkbox" id="upperCase" name="upperCase">All Upper Case</input>
+            <input type="checkbox" id="upperCase" name="upperCase">All Upper Case
           </label>
           <label class="col-lg-2">
-            <input type="checkbox" id="lowerCase" name="lowerCase">All Lower Case</input>
+            <input type="checkbox" id="lowerCase" name="lowerCase">All Lower Case
           </label>
           <label class="col-lg-4">
-            <input type="checkbox" id="includeSymbol" name="includeSymbol">Include Symbols (&#36;&#45;&#64;&#95;&#38;)</input>
+            <input type="checkbox" id="includeSymbol" name="includeSymbol">Include Symbols (&#36;&#45;&#64;&#95;&#38;)
           </label>
         </div>
 
@@ -100,69 +86,8 @@
         </div>
       </form>
     </div> 
-    <script type="text/JavaScript">
-      $("#upperCase").click(function(){
-        $('#lowerCase').attr('checked', false);
-        $('#capitalization').attr('checked', false);
-      })
 
-      $("#lowerCase").click(function(){
-        $('#upperCase').attr('checked', false);
-        $('#capitalization').attr('checked', false);
-      })
-
-      $("#capitalization").click(function(){
-        $('#upperCase').attr('checked', false);
-        $('#lowerCase').attr('checked', false);
-      })
-
-      $("#submitBtn").click(function(){
-        var proceed = true;
-        console.log("maxLength.val() is "+$("#maxLength").val());
-
-        var decimal=  /^[0-9]*[.][0-9]*$/;
-        if($("#maxLength").val() !== ""){
-          if(isNaN($("#maxLength").val()) || $("#maxLength").val() <= 0 || $("#maxLength").val().match(decimal)) { 
-        //if user did not input a number in the Max number of password field
-        //that is if input field is not empty, the input is a positive integer
-          proceed = false; // do not proceed
-          $("#maxLength").css('border-color', 'red'); // change border color to red
-          $("#maxLength").val("Please enter a natural number.");
-          }
-        }
-        
-
-        if(proceed){
-          $("#maxLength").css('border-color', 'green'); // reset the border color
-
-          get_data = {
-            'wordCount'       : $('select[name="wordCount"]').val(),
-            'maxLength'       : $('input[name="maxLength"]').val(),
-            'includeDigit'    : $('input[name="includeDigit"]').prop('checked'),
-            'capitalization'  : $('input[name="capitalization"]').prop('checked'),
-            'upperCase'       : $('input[name="upperCase"]').prop('checked'),
-            'lowerCase'       : $('input[name="lowerCase"]').prop('checked'),
-            'includeSymbol'   : $('input[name="includeSymbol"]').prop('checked')
-          };
-
-
-          $.get("php/passwordGenerator.php", get_data).done(function(response){
-            console.log("entering .get function!");
-            console.log(response);
-            var obj = jQuery.parseJSON(response);
-
-            if(obj.type == 'error'){
-              $("#password").css('color', 'red');
-            } else {
-              $("#password").css('color', '#5cb85c');
-            }
-
-            $("#password").text(obj.text);
-          }, 'json');
-        }
-        return false;
-      })
-    </script>
+    <script src="myscripts.js"></script>
     
 </body>
 </html>
