@@ -1,12 +1,10 @@
 <?php
-  	error_reporting(E_ALL);
-  	ini_set('display_errors', 1);
+
   	$temp_output = "";
 
 	$content = array();
 
-	if($_GET)
-	{
+	if($_GET){
 		$wordCount = filter_var($_GET["wordCount"], FILTER_SANITIZE_STRING);
 		$maxLength = filter_var($_GET["maxLength"], FILTER_SANITIZE_NUMBER_INT);
 		$includeDigit = filter_var($_GET["includeDigit"], FILTER_VALIDATE_BOOLEAN);
