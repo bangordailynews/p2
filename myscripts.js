@@ -1,16 +1,22 @@
-$("#upperCase").click(function(){
+
+var wordCase = 1;
+
+      $("#upperCase").click(function(){
         $('#lowerCase').attr('checked', false);
         $('#capitalization').attr('checked', false);
+	wordCase = 1;
       })
 
       $("#lowerCase").click(function(){
         $('#upperCase').attr('checked', false);
         $('#capitalization').attr('checked', false);
+	wordCase = 2;
       })
 
       $("#capitalization").click(function(){
         $('#upperCase').attr('checked', false);
         $('#lowerCase').attr('checked', false);
+	wordCase = 3;
       })
 
       $("#submitBtn").click(function(){
@@ -30,18 +36,14 @@ $("#upperCase").click(function(){
         
 
         if(proceed){
-          $("#maxLength").css('border-color', 'green'); // reset the border color
-
-          get_data = {
-            'wordCount'       : $('select[name="wordCount"]').val(),
-            'maxLength'       : $('input[name="maxLength"]').val(),
-            'includeDigit'    : $('input[name="includeDigit"]').prop('checked'),
-            'capitalization'  : $('input[name="capitalization"]').prop('checked'),
-            'upperCase'       : $('input[name="upperCase"]').prop('checked'),
-            'lowerCase'       : $('input[name="lowerCase"]').prop('checked'),
-            'includeSymbol'   : $('input[name="includeSymbol"]').prop('checked')
+        	$("#maxLength").css('border-color', 'green'); // reset the border color		
+		get_data = {
+			'wordCount'       : $('select[name="wordCount"]').val(),
+			'maxLength'       : $('input[name="maxLength"]').val(),
+			'includeDigit'    : $('input[name="includeDigit"]').prop('checked'),
+			'wordCase'	  : wordCase,
+			'includeSymbol'   : $('input[name="includeSymbol"]').prop('checked')
           };
-
 
           $.get("php/passwordGenerator.php", get_data).done(function(response){
             console.log("entering .get function!");
